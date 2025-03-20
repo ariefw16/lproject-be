@@ -13,7 +13,7 @@ import { CreateUserDTO } from './dtos/CreateUserDTO.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   @Get('/')
   getUser(@Query() q: GetListUserDTO) {
@@ -23,11 +23,8 @@ export class UserController {
   @Post('/')
   create(@Body() dto: CreateUserDTO) {
     try {
-      this.userService.create(dto);
-      return {
-        success: true,
-        status: 201,
-      };
-    } catch (error) {}
+      const data = this.userService.create(dto);
+      return data;
+    } catch (error) { }
   }
 }
