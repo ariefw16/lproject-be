@@ -5,10 +5,16 @@ import { PrismaModule } from 'src/common/prisma/prisma.module';
 import { GetUserHandler } from './queries/handlers/get-user.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { UpdateUserHandler } from './commands/handlers/update-user.handler';
+import { DeleteUserHandler } from './commands/handlers/delete-user.handler';
 
 @Module({
   controllers: [UserController],
-  providers: [UserService, GetUserHandler, UpdateUserHandler],
+  providers: [
+    UserService,
+    GetUserHandler,
+    UpdateUserHandler,
+    DeleteUserHandler,
+  ],
   imports: [PrismaModule, CqrsModule],
 })
 export class UserModule { }

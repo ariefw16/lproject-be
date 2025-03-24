@@ -14,12 +14,20 @@ export class UserService {
     const where: Prisma.UserWhereInput = {
       name: { contains: q },
       email: { contains: q },
+      deletedAt: null,
     };
     const [data, count] = await Promise.all([
       this.prisma.user.findMany({
         take: limit,
         skip: (page - 1) * limit,
         where,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       }),
       this.prisma.user.count({ where }),
     ]);
@@ -34,13 +42,37 @@ export class UserService {
   }
 
   async create(data: CreateUserDTO) {
-    return await this.prisma.user.create({ data });
+    return await this.prisma.user.create({
+      data,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
   async update(data: UpdateUserDTO, id: string) {
     return await this.prisma.user.update({
-      where: { id },
+      where: { id, deletedAt: null },
       data,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  async delete(id: string) {
+    return await this.prisma.user.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+      select: { id: true },
     });
   }
 }

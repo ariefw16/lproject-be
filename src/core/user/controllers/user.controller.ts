@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -16,6 +17,7 @@ import { GetUserQuery } from '../queries/get-user.query';
 import { CreateUserCommand } from '../commands/create-user.command';
 import { UpdateUserDTO } from '../dtos/update-user.dto';
 import { UpdateUserCommand } from '../commands/update-user.command';
+import { DeleteUserCommand } from '../commands/delete-user.command';
 
 @Controller('user')
 export class UserController {
@@ -49,6 +51,17 @@ export class UserController {
       );
       return data;
     } catch (error) {
+      throw new BadRequestException(error.meta?.cause);
+    }
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    try {
+      const data = this.commandBus.execute(new DeleteUserCommand(id));
+      return data;
+    } catch (error) {
+      console.error(error);
       throw new BadRequestException(error.meta?.cause);
     }
   }
