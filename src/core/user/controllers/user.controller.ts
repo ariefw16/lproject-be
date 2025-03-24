@@ -1,22 +1,28 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { GetListUserDTO } from '.././dtos/GetUserDto.dto';
-import { UserService } from '../services//user.service';
 import { CreateUserDTO } from '.././dtos/CreateUserDTO.dto';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { GetUserQuery } from '../queries/get-user.query';
+import { CreateUserCommand } from '../commands/create-user.command';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) { }
 
   @Get('/')
-  getUser(@Query() q: GetListUserDTO) {
-    return this.userService.getUser(q);
+  async getUser(@Query() q: GetListUserDTO) {
+    const data = await this.queryBus.execute(new GetUserQuery(q));
+    return data;
   }
 
   @Post('/')
-  create(@Body() dto: CreateUserDTO) {
+  async create(@Body() dto: CreateUserDTO) {
     try {
-      const data = this.userService.create(dto);
+      const data = await this.commandBus.execute(new CreateUserCommand(dto));
       return data;
-    } catch (error) {}
+    } catch (error) { }
   }
 }

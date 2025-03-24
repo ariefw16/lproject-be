@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class GetListUserDTO {
@@ -8,11 +8,13 @@ export class GetListUserDTO {
   @ApiPropertyOptional()
   q?: string;
 
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
   page: number;
 
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
