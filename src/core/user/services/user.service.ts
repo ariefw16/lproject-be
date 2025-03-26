@@ -41,6 +41,31 @@ export class UserService {
     };
   }
 
+  async getUserByUsername(username: string) {
+    const where: Prisma.UserWhereInput = {
+      deletedAt: null,
+      username,
+    };
+    const data = await this.prisma.user.findMany({
+      take: 1,
+      where,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return {
+      data,
+      meta: {
+        count: 1,
+      },
+    };
+  }
+
   async create(data: CreateUserDTO) {
     return await this.prisma.user.create({
       data,

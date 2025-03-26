@@ -6,6 +6,7 @@ import { GetUserHandler } from './queries/handlers/get-user.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { UpdateUserHandler } from './commands/handlers/update-user.handler';
 import { DeleteUserHandler } from './commands/handlers/delete-user.handler';
+import { GetUserByUsernameHandler } from './queries/handlers/get-user-username.handler';
 
 @Module({
   controllers: [UserController],
@@ -14,6 +15,7 @@ import { DeleteUserHandler } from './commands/handlers/delete-user.handler';
     GetUserHandler,
     UpdateUserHandler,
     DeleteUserHandler,
+    GetUserByUsernameHandler,
   ],
   imports: [PrismaModule, CqrsModule],
 })
