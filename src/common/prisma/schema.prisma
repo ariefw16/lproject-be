@@ -24,3 +24,55 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 }
+
+model Regional {
+  id        String     @id @default(uuid())
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?
+  Provinsi  Provinsi[]
+}
+
+model Provinsi {
+  id         String      @id @default(uuid())
+  name       String
+  regional   Regional    @relation(fields: [regionalId], references: [id])
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  deletedAt  DateTime?
+  regionalId String
+  kabupaten  Kabupaten[]
+}
+
+model Kabupaten {
+  id         String      @id @default(uuid())
+  name       String
+  provinsi   Provinsi    @relation(fields: [provinsiId], references: [id])
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  deletedAt  DateTime?
+  provinsiId String
+  kecamatan  Kecamatan[]
+}
+
+model Kecamatan {
+  id          String      @id @default(uuid())
+  name        String
+  kabupaten   Kabupaten   @relation(fields: [kabupatenId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+  kabupatenId String
+  Kelurahan   Kelurahan[]
+}
+
+model Kelurahan {
+  id          String    @id @default(uuid())
+  name        String
+  kecamatan   Kecamatan @relation(fields: [kecamatanId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  kecamatanId String
+}
