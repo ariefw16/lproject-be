@@ -12,20 +12,26 @@ import {
 import { CreateRegionDTO } from '../dtos/create-region.dto';
 import { GetRegionDTO } from '../dtos/get-region.dto';
 import { UpdateRegionDTO } from '../dtos/update-region.dto';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { GetRegionQuery } from '../queries/get-region.query';
+import { CreateRegionCommand } from '../commands/create-region.command';
 
 @Controller('region')
 export class RegionController {
-  constructor() { }
+  constructor(
+    private readonly query: QueryBus,
+    private readonly command: CommandBus,
+  ) { }
 
   @Get()
   @UsePipes()
   index(@Query() dto: GetRegionDTO) {
-    return dto;
+    return this.query.execute(new GetRegionQuery(dto));
   }
 
   @Post()
   create(dto: CreateRegionDTO) {
-    return dto;
+    return this.command.execute(new CreateRegionCommand(dto));
   }
 
   @Put(':id')

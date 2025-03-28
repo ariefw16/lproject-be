@@ -1,0 +1,41 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/common/prisma/prisma.service';
+import { GetRegionDTO } from '../dtos/get-region.dto';
+import { Prisma } from '@prisma/client';
+import { CreateRegionDTO } from '../dtos/create-region.dto';
+
+@Injectable()
+export class RegionService {
+  constructor(private readonly prisma: PrismaService) { }
+
+  async getData(dto: GetRegionDTO) {
+    const { page, q, limit } = dto;
+    const where: Prisma.RegionalWhereInput = {
+      name: { contains: q },
+      deletedAt: null,
+    };
+    return await this.prisma.regional.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where,
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  async create(dto: CreateRegionDTO) {
+    return await this.prisma.regional.create({
+      data: dto,
+      select: {
+        id: true,
+        name: true,
+        updatedAt: true,
+        createdAt: true,
+      },
+    });
+  }
+}
