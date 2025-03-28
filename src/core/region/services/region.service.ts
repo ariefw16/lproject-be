@@ -3,6 +3,7 @@ import { PrismaService } from 'src/common/prisma/prisma.service';
 import { GetRegionDTO } from '../dtos/get-region.dto';
 import { Prisma } from '@prisma/client';
 import { CreateRegionDTO } from '../dtos/create-region.dto';
+import { UpdateRegionDTO } from '../dtos/update-region.dto';
 
 @Injectable()
 export class RegionService {
@@ -29,6 +30,19 @@ export class RegionService {
 
   async create(dto: CreateRegionDTO) {
     return await this.prisma.regional.create({
+      data: dto,
+      select: {
+        id: true,
+        name: true,
+        updatedAt: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  async update(dto: UpdateRegionDTO, id: string) {
+    return await this.prisma.regional.update({
+      where: { id },
       data: dto,
       select: {
         id: true,
