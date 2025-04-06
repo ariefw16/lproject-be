@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -15,6 +16,7 @@ import { UpdateRegionDTO } from '../dtos/update-region.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetRegionQuery } from '../queries/get-region.query';
 import { CreateRegionCommand } from '../commands/create-region.command';
+import { UpdateRegionCommand } from '../commands/update-region.command';
 
 @Controller('region')
 export class RegionController {
@@ -30,13 +32,23 @@ export class RegionController {
   }
 
   @Post()
-  create(dto: CreateRegionDTO) {
-    return this.command.execute(new CreateRegionCommand(dto));
+  async create(@Body() dto: CreateRegionDTO) {
+    try {
+      const data = await this.command.execute(new CreateRegionCommand(dto));
+      return data;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateRegionDTO) {
-    return dto;
+  async update(@Param('id') id: string, @Body() dto: UpdateRegionDTO) {
+    try {
+      const data = await this.command.execute(new UpdateRegionCommand(id, dto));
+      return data;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Delete(':id')

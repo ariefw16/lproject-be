@@ -30,7 +30,7 @@ export class RegionService {
 
   async create(dto: CreateRegionDTO) {
     return await this.prisma.regional.create({
-      data: dto,
+      data: { ...dto },
       select: {
         id: true,
         name: true,
@@ -50,6 +50,14 @@ export class RegionService {
         updatedAt: true,
         createdAt: true,
       },
+    });
+  }
+
+  async delete(id: string) {
+    return await this.prisma.regional.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+      select: { id: true },
     });
   }
 }
