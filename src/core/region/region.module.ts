@@ -6,16 +6,24 @@ import { PrismaModule } from 'src/common/prisma/prisma.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateRegionHandler } from './commands/handlers/create-region.handler';
 import { UpdateRegionHandler } from './commands/handlers/update-region.handler';
+import { ProvinsiService } from './services/provinsi.service';
+import { ProvinsiController } from './controllers/provinsi.controller';
 
 @Module({
-  controllers: [RegionController],
+  controllers: [RegionController, ProvinsiController],
   providers: [
-    GetRegionHandler,
+    //Service
     RegionService,
+    ProvinsiService,
+
+    //Command Handler
     CreateRegionHandler,
     UpdateRegionHandler,
+
+    //Query Handler
+    GetRegionHandler,
     GetRegionHandler,
   ],
   imports: [PrismaModule, CqrsModule],
 })
-export class RegionModule { }
+export class RegionModule {}

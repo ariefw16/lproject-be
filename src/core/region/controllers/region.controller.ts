@@ -17,13 +17,14 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetRegionQuery } from '../queries/get-region.query';
 import { CreateRegionCommand } from '../commands/create-region.command';
 import { UpdateRegionCommand } from '../commands/update-region.command';
+import { DeleteRegionCommand } from '../commands/delete-region.command';
 
 @Controller('region')
 export class RegionController {
   constructor(
     private readonly query: QueryBus,
     private readonly command: CommandBus,
-  ) { }
+  ) {}
 
   @Get()
   @UsePipes()
@@ -52,7 +53,12 @@ export class RegionController {
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return id;
+  async delete(@Param('id') id: string) {
+    try {
+      const data = await this.command.execute(new DeleteRegionCommand(id));
+      return data;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
