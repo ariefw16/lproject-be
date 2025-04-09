@@ -8,6 +8,8 @@ import { CreateRegionHandler } from './commands/handlers/create-region.handler';
 import { UpdateRegionHandler } from './commands/handlers/update-region.handler';
 import { ProvinsiService } from './services/provinsi.service';
 import { ProvinsiController } from './controllers/provinsi.controller';
+import { DeleteRegionHandler } from './commands/handlers/delete-region.handler';
+import { GetProvinsiHandler } from './queries/handlers/get-provinsi.handler';
 
 @Module({
   controllers: [RegionController, ProvinsiController],
@@ -19,10 +21,11 @@ import { ProvinsiController } from './controllers/provinsi.controller';
     //Command Handler
     CreateRegionHandler,
     UpdateRegionHandler,
+    DeleteRegionHandler,
 
     //Query Handler
     GetRegionHandler,
-    GetRegionHandler,
+    GetProvinsiHandler,
   ],
   imports: [PrismaModule, CqrsModule],
 })

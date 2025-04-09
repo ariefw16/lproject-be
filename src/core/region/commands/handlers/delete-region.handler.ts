@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { DeleteRegionCommand } from '../delete-region.command';
 import { RegionService } from '../../services/region.service';
 
-CommandHandler(DeleteRegionCommand);
+@CommandHandler(DeleteRegionCommand)
 export class DeleteRegionHandler
   implements ICommandHandler<DeleteRegionCommand>
 {

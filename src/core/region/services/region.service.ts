@@ -7,7 +7,7 @@ import { UpdateRegionDTO } from '../dtos/update-region.dto';
 
 @Injectable()
 export class RegionService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async getData(dto: GetRegionDTO) {
     const { page, q, limit } = dto;
@@ -15,17 +15,22 @@ export class RegionService {
       name: { contains: q },
       deletedAt: null,
     };
-    return await this.prisma.regional.findMany({
-      take: limit,
-      skip: (page - 1) * limit,
-      where,
-      select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+    const [data, count] = await Promise.all([
+      this.prisma.regional.findMany({
+        take: limit,
+        skip: (page - 1) * limit,
+        where,
+        select: {
+          id: true,
+          name: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      }),
+      this.prisma.regional.count({ where }),
+    ]);
+
+    return {};
   }
 
   async create(dto: CreateRegionDTO) {

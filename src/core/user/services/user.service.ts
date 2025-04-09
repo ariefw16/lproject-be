@@ -7,7 +7,7 @@ import { UpdateUserDTO } from '../dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async getUser(dto: GetListUserDTO) {
     const { page, q, limit } = dto;
