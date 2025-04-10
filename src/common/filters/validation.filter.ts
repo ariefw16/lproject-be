@@ -17,8 +17,6 @@ export class ValidationExceptionFilter implements ExceptionFilter {
 
     let formattedErrors = {};
 
-    console.log('EXCEPTION RESPONSE:', exceptionResponse); // Debugging
-
     // Ensure exceptionResponse is an object and has a "message" array
     if (
       typeof exceptionResponse === 'object' &&
