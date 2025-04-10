@@ -18,6 +18,8 @@ import { CreateUserCommand } from '../commands/create-user.command';
 import { UpdateUserDTO } from '../dtos/update-user.dto';
 import { UpdateUserCommand } from '../commands/update-user.command';
 import { DeleteUserCommand } from '../commands/delete-user.command';
+import { APIResponse } from 'src/common/interfaces/APIResponse.interface';
+import { UserEntity } from '../entities/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -35,9 +37,12 @@ export class UserController {
   @Post('/')
   async create(@Body() dto: CreateUserDTO) {
     try {
-      const data = await this.commandBus.execute(new CreateUserCommand(dto));
+      const data: APIResponse<UserEntity> = await this.commandBus.execute(
+        new CreateUserCommand(dto),
+      );
       return data;
     } catch (error) {
+      // console.log(error);
       return { error };
     }
   }
