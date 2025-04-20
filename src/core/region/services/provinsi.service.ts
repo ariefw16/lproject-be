@@ -103,6 +103,10 @@ export class ProvinsiService {
   }
 
   async delete(id: string): Promise<APIResponse<string>> {
+    await this.prisma.provinsi.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
     return {
       success: true,
       status: 200,

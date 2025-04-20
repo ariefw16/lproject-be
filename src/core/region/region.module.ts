@@ -10,13 +10,17 @@ import { ProvinsiService } from './services/provinsi.service';
 import { ProvinsiController } from './controllers/provinsi.controller';
 import { DeleteRegionHandler } from './commands/handlers/delete-region.handler';
 import { GetProvinsiHandler } from './queries/handlers/get-provinsi.handler';
+import { KabupatenService } from './services/kabupaten.service';
+import { GetKabupatenHandler } from './queries/handlers/get-kabupaten.handler';
+import { KabupatenController } from './controllers/kabupaten.controller';
 
 @Module({
-  controllers: [RegionController, ProvinsiController],
+  controllers: [RegionController, ProvinsiController, KabupatenController],
   providers: [
     //Service
     RegionService,
     ProvinsiService,
+    KabupatenService,
 
     //Command Handler
     CreateRegionHandler,
@@ -26,7 +30,8 @@ import { GetProvinsiHandler } from './queries/handlers/get-provinsi.handler';
     //Query Handler
     GetRegionHandler,
     GetProvinsiHandler,
+    GetKabupatenHandler,
   ],
   imports: [PrismaModule, CqrsModule],
 })
-export class RegionModule {}
+export class RegionModule { }
