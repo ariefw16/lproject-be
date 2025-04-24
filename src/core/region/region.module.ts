@@ -13,6 +13,10 @@ import { GetProvinsiHandler } from './queries/handlers/get-provinsi.handler';
 import { KabupatenService } from './services/kabupaten.service';
 import { GetKabupatenHandler } from './queries/handlers/get-kabupaten.handler';
 import { KabupatenController } from './controllers/kabupaten.controller';
+import { CreateProvinsiHandler } from './commands/handlers/create-provinsi.handler';
+import { CreateKabupatenHandler } from './commands/handlers/create-kabupaten.handler';
+import { UpdateProvinsiHandler } from './commands/handlers/update-provinsi.handler';
+import { DeleteProvinsiHandler } from './commands/handlers/delete-provinsi.handler';
 
 @Module({
   controllers: [RegionController, ProvinsiController, KabupatenController],
@@ -26,6 +30,10 @@ import { KabupatenController } from './controllers/kabupaten.controller';
     CreateRegionHandler,
     UpdateRegionHandler,
     DeleteRegionHandler,
+    CreateProvinsiHandler,
+    UpdateProvinsiHandler,
+    DeleteProvinsiHandler,
+    CreateKabupatenHandler,
 
     //Query Handler
     GetRegionHandler,
@@ -34,4 +42,4 @@ import { KabupatenController } from './controllers/kabupaten.controller';
   ],
   imports: [PrismaModule, CqrsModule],
 })
-export class RegionModule { }
+export class RegionModule {}

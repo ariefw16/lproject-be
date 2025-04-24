@@ -5,6 +5,7 @@ import { GetKabupatenDTO } from '../dtos/get-kabupaten.dto';
 import { KabupatenEntity } from '../entities/kabupaten.entity';
 import { APIResponse } from 'src/common/interfaces/APIResponse.interface';
 import { plainToInstance } from 'class-transformer';
+import { CreateKabupatenDTO } from '../dtos/create-kabupaten.dto';
 
 @Injectable()
 export class KabupatenService {
@@ -24,8 +25,22 @@ export class KabupatenService {
     };
   }
 
-  async create() {
-    return;
+  async create(dto: CreateKabupatenDTO): Promise<APIResponse<KabupatenEntity>> {
+    const kab = await this.prisma.kabupaten.create({
+      data: dto,
+      select: this.normalSelect,
+    });
+
+    const data = plainToInstance(KabupatenEntity, kab, {
+      excludeExtraneousValues: true,
+    });
+
+    return {
+      success: true,
+      status: 201,
+      message: 'Kabupated Created Succesfully',
+      data,
+    };
   }
 
   async getData(dto: GetKabupatenDTO): Promise<APIResponse<KabupatenEntity[]>> {
