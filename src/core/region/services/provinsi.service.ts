@@ -7,6 +7,7 @@ import { APIResponse } from 'src/common/interfaces/APIResponse.interface';
 import { ProvinsiEntity } from '../entities/provinsi.entity';
 import { plainToInstance } from 'class-transformer';
 import { UpdateProvinsiDTO } from '../dtos/update-provinsi.dto';
+import { handlePrismaError } from 'src/common/prisma/prisma-error-handler';
 
 @Injectable()
 export class ProvinsiService {
@@ -19,7 +20,12 @@ export class ProvinsiService {
       deletedAt: true,
       updatedAt: true,
       kabupaten: true,
-      regional: true,
+      regional: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       regionalId: true,
     };
   }
@@ -50,13 +56,14 @@ export class ProvinsiService {
       name: {
         contains: q,
       },
+      deletedAt: null,
     };
 
     const [prov, total] = await Promise.all([
       this.prisma.provinsi.findMany({
         where,
         select: this.normalSelect,
-        skip: limit * page,
+        skip: limit * (page - 1),
         take: limit,
       }),
       this.prisma.provinsi.count({ where }),
@@ -84,22 +91,26 @@ export class ProvinsiService {
     dto: UpdateProvinsiDTO,
     id: string,
   ): Promise<APIResponse<ProvinsiEntity>> {
-    const prov = await this.prisma.provinsi.update({
-      select: this.normalSelect,
-      data: dto,
-      where: { id },
-    });
+    try {
+      const prov = await this.prisma.provinsi.update({
+        select: this.normalSelect,
+        data: dto,
+        where: { id, deletedAt: null },
+      });
 
-    const data = plainToInstance(ProvinsiEntity, prov, {
-      excludeExtraneousValues: true,
-    });
+      const data = plainToInstance(ProvinsiEntity, prov, {
+        excludeExtraneousValues: true,
+      });
 
-    return {
-      success: true,
-      status: 200,
-      message: 'Update Data Success',
-      data,
-    };
+      return {
+        success: true,
+        status: 200,
+        message: 'Update Data Success',
+        data,
+      };
+    } catch (error) {
+      handlePrismaError(error);
+    }
   }
 
   async delete(id: string): Promise<APIResponse<string>> {

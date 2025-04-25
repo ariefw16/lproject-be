@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateProvinsiCommand } from '../create-provinsi.command';
 import { ProvinsiService } from '../../services/provinsi.service';
 
-CommandHandler(CreateProvinsiCommand);
+@CommandHandler(CreateProvinsiCommand)
 export class CreateProvinsiHandler
   implements ICommandHandler<CreateProvinsiCommand>
 {

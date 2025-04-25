@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -31,14 +32,22 @@ export class ProvinsiController {
 
   @Post('/')
   async create(@Body() dto: CreateProvinsiDTO) {
-    return await this.commandBus.execute(new CreateProvinsiCommand(dto));
+    try {
+      return await this.commandBus.execute(new CreateProvinsiCommand(dto));
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateProvinsiDTO) {
-    return await this.commandBus.execute(
-      new UpdateProvinsiCommand({ id, data: dto }),
-    );
+    try {
+      return await this.commandBus.execute(
+        new UpdateProvinsiCommand({ id, data: dto }),
+      );
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Delete(':id')

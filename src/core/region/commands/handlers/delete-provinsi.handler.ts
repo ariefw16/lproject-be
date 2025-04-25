@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { DeleteProvinsiCommand } from '../delete-provinsi.command';
 import { ProvinsiService } from '../../services/provinsi.service';
 
-CommandHandler(DeleteProvinsiCommand);
+@CommandHandler(DeleteProvinsiCommand)
 export class DeleteProvinsiHandler
   implements ICommandHandler<DeleteProvinsiCommand>
 {
