@@ -33,21 +33,25 @@ export class ProvinsiService {
   async create(dto: CreateProvinsiDTO): Promise<APIResponse<ProvinsiEntity>> {
     const { ...data } = dto;
 
-    const prov = await this.prisma.provinsi.create({
-      data,
-      select: this.normalSelect,
-    });
+    try {
+      const prov = await this.prisma.provinsi.create({
+        data,
+        select: this.normalSelect,
+      });
 
-    const res = plainToInstance(ProvinsiEntity, prov, {
-      excludeExtraneousValues: true,
-    });
+      const res = plainToInstance(ProvinsiEntity, prov, {
+        excludeExtraneousValues: true,
+      });
 
-    return {
-      success: true,
-      status: 201,
-      message: 'Provinsi Created Successfully',
-      data: res,
-    };
+      return {
+        success: true,
+        status: 201,
+        message: 'Provinsi Created Successfully',
+        data: res,
+      };
+    } catch (error) {
+      handlePrismaError(error);
+    }
   }
 
   async getData(dto: GetProvinsiDTO): Promise<APIResponse<ProvinsiEntity[]>> {
@@ -59,32 +63,36 @@ export class ProvinsiService {
       deletedAt: null,
     };
 
-    const [prov, total] = await Promise.all([
-      this.prisma.provinsi.findMany({
-        where,
-        select: this.normalSelect,
-        skip: limit * (page - 1),
-        take: limit,
-      }),
-      this.prisma.provinsi.count({ where }),
-    ]);
+    try {
+      const [prov, total] = await Promise.all([
+        this.prisma.provinsi.findMany({
+          where,
+          select: this.normalSelect,
+          skip: limit * (page - 1),
+          take: limit,
+        }),
+        this.prisma.provinsi.count({ where }),
+      ]);
 
-    const data = plainToInstance(ProvinsiEntity, prov, {
-      excludeExtraneousValues: true,
-    });
+      const data = plainToInstance(ProvinsiEntity, prov, {
+        excludeExtraneousValues: true,
+      });
 
-    return {
-      success: true,
-      status: 200,
-      message: 'Fetching Data Success',
-      data,
-      meta: {
-        total,
-        per_page: limit,
-        current_page: page,
-        last_page: Math.ceil(total / limit),
-      },
-    };
+      return {
+        success: true,
+        status: 200,
+        message: 'Fetching Data Success',
+        data,
+        meta: {
+          total,
+          per_page: limit,
+          current_page: page,
+          last_page: Math.ceil(total / limit),
+        },
+      };
+    } catch (error) {
+      handlePrismaError(error);
+    }
   }
 
   async update(
@@ -114,15 +122,19 @@ export class ProvinsiService {
   }
 
   async delete(id: string): Promise<APIResponse<string>> {
-    await this.prisma.provinsi.update({
-      where: { id },
-      data: { deletedAt: new Date() },
-    });
-    return {
-      success: true,
-      status: 200,
-      message: 'Deleting Data Success',
-      data: id,
-    };
+    try {
+      await this.prisma.provinsi.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+      });
+      return {
+        success: true,
+        status: 200,
+        message: 'Deleting Data Success',
+        data: id,
+      };
+    } catch (error) {
+      handlePrismaError(error);
+    }
   }
 }
