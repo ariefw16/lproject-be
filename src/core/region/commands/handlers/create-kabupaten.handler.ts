@@ -8,6 +8,7 @@ export class CreateKabupatenHandler
   constructor(private readonly kabupaten: KabupatenService) { }
 
   execute(command: CreateKabupatenCommand): Promise<any> {
-    return this.kabupaten.create(command.dto);
+    const { data } = command.args;
+    return this.kabupaten.create(data);
   }
 }

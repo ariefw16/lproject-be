@@ -6,6 +6,8 @@ import { KabupatenEntity } from '../entities/kabupaten.entity';
 import { APIResponse } from 'src/common/interfaces/APIResponse.interface';
 import { plainToInstance } from 'class-transformer';
 import { CreateKabupatenDTO } from '../dtos/create-kabupaten.dto';
+import { handlePrismaError } from 'src/common/prisma/prisma-error-handler';
+import { UpdateKabupatenDTO } from '../dtos/update-kabupaten.dto';
 
 @Injectable()
 export class KabupatenService {
@@ -26,21 +28,25 @@ export class KabupatenService {
   }
 
   async create(dto: CreateKabupatenDTO): Promise<APIResponse<KabupatenEntity>> {
-    const kab = await this.prisma.kabupaten.create({
-      data: dto,
-      select: this.normalSelect,
-    });
+    try {
+      const kab = await this.prisma.kabupaten.create({
+        data: dto,
+        select: this.normalSelect,
+      });
 
-    const data = plainToInstance(KabupatenEntity, kab, {
-      excludeExtraneousValues: true,
-    });
+      const data = plainToInstance(KabupatenEntity, kab, {
+        excludeExtraneousValues: true,
+      });
 
-    return {
-      success: true,
-      status: 201,
-      message: 'Kabupated Created Succesfully',
-      data,
-    };
+      return {
+        success: true,
+        status: 201,
+        message: 'Kabupated Created Succesfully',
+        data,
+      };
+    } catch (error) {
+      handlePrismaError(error);
+    }
   }
 
   async getData(dto: GetKabupatenDTO): Promise<APIResponse<KabupatenEntity[]>> {
@@ -76,11 +82,48 @@ export class KabupatenService {
     };
   }
 
-  async update() {
-    return;
+  async update(
+    id: string,
+    dto: UpdateKabupatenDTO,
+  ): Promise<APIResponse<KabupatenEntity>> {
+    const { name, provinsiId } = dto;
+    try {
+      const kab = await this.prisma.kabupaten.update({
+        where: { id },
+        data: { name, provinsiId },
+        select: this.normalSelect,
+      });
+
+      const data = plainToInstance(KabupatenEntity, kab, {
+        excludeExtraneousValues: true,
+      });
+
+      return {
+        success: true,
+        status: 200,
+        message: 'Data Update success',
+        data,
+      };
+    } catch (error) {
+      handlePrismaError(error);
+    }
   }
 
-  async delete(id: string) {
-    return { id };
+  async delete(id: string): Promise<APIResponse<string>> {
+    try {
+      await this.prisma.kabupaten.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+        select: { id: true },
+      });
+      return {
+        success: true,
+        status: 200,
+        message: 'Data Deleted success',
+        data: id,
+      };
+    } catch (error) {
+      handlePrismaError(error);
+    }
   }
 }
