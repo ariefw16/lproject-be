@@ -17,6 +17,7 @@ import { CreateProvinsiHandler } from './commands/handlers/create-provinsi.handl
 import { CreateKabupatenHandler } from './commands/handlers/create-kabupaten.handler';
 import { UpdateProvinsiHandler } from './commands/handlers/update-provinsi.handler';
 import { DeleteProvinsiHandler } from './commands/handlers/delete-provinsi.handler';
+import { DeleteKabupatenHandler } from './commands/handlers/delete-kabupaten.handler';
 
 @Module({
   controllers: [RegionController, ProvinsiController, KabupatenController],
@@ -34,6 +35,7 @@ import { DeleteProvinsiHandler } from './commands/handlers/delete-provinsi.handl
     UpdateProvinsiHandler,
     DeleteProvinsiHandler,
     CreateKabupatenHandler,
+    DeleteKabupatenHandler,
 
     //Query Handler
     GetRegionHandler,

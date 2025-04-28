@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -15,6 +16,7 @@ import { CreateKabupatenDTO } from '../dtos/create-kabupaten.dto';
 import { CreateKabupatenCommand } from '../commands/create-kabupaten.command';
 import { UpdateKabupatenDTO } from '../dtos/update-kabupaten.dto';
 import { UpdateKabupatenCommand } from '../commands/update-kabupaten.command';
+import { DeleteKabupatenCommand } from '../commands/delete-kabupaten.command';
 
 @Controller('kabupaten')
 export class KabupatenController {
@@ -46,6 +48,15 @@ export class KabupatenController {
       return await this.command.execute(
         new UpdateKabupatenCommand({ id, data }),
       );
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    try {
+      return await this.command.execute(new DeleteKabupatenCommand(id));
     } catch (error) {
       throw new BadRequestException(error);
     }
