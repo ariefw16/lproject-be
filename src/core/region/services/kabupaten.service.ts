@@ -58,7 +58,7 @@ export class KabupatenService {
       this.prisma.kabupaten.findMany({
         where,
         select: this.normalSelect,
-        skip: per_page * current_page,
+        skip: per_page * (current_page - 1),
         take: per_page,
       }),
       this.prisma.kabupaten.count({ where }),

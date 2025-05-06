@@ -18,29 +18,43 @@ import { CreateKabupatenHandler } from './commands/handlers/create-kabupaten.han
 import { UpdateProvinsiHandler } from './commands/handlers/update-provinsi.handler';
 import { DeleteProvinsiHandler } from './commands/handlers/delete-provinsi.handler';
 import { DeleteKabupatenHandler } from './commands/handlers/delete-kabupaten.handler';
+import { UpdateKabupatenHandler } from './commands/handlers/update-kabupaten.handler';
+import { KecamatanController } from './controllers/kecamatan.controller';
+import { GetKecamatanHandler } from './queries/handlers/get-kecamatan.handler';
+import { KecamatanService } from './services/kecamatan.service';
+import { CreateKecamatanHandler } from './commands/handlers/create-kecamatan.handler';
 
 @Module({
-  controllers: [RegionController, ProvinsiController, KabupatenController],
+  controllers: [
+    RegionController,
+    ProvinsiController,
+    KabupatenController,
+    KecamatanController,
+  ],
   providers: [
     //Service
     RegionService,
     ProvinsiService,
     KabupatenService,
+    KecamatanService,
 
     //Command Handler
     CreateRegionHandler,
-    UpdateRegionHandler,
-    DeleteRegionHandler,
     CreateProvinsiHandler,
-    UpdateProvinsiHandler,
-    DeleteProvinsiHandler,
     CreateKabupatenHandler,
+    CreateKecamatanHandler,
+    UpdateRegionHandler,
+    UpdateProvinsiHandler,
+    UpdateKabupatenHandler,
+    DeleteRegionHandler,
+    DeleteProvinsiHandler,
     DeleteKabupatenHandler,
 
     //Query Handler
     GetRegionHandler,
     GetProvinsiHandler,
     GetKabupatenHandler,
+    GetKecamatanHandler,
   ],
   imports: [PrismaModule, CqrsModule],
 })
