@@ -23,6 +23,8 @@ import { KecamatanController } from './controllers/kecamatan.controller';
 import { GetKecamatanHandler } from './queries/handlers/get-kecamatan.handler';
 import { KecamatanService } from './services/kecamatan.service';
 import { CreateKecamatanHandler } from './commands/handlers/create-kecamatan.handler';
+import { UpdateKecamatanHandler } from './commands/handlers/update-kecamatan.handler';
+import { DeleteKecamatanHandler } from './commands/handlers/delete-kecamatan.handler';
 
 @Module({
   controllers: [
@@ -46,9 +48,11 @@ import { CreateKecamatanHandler } from './commands/handlers/create-kecamatan.han
     UpdateRegionHandler,
     UpdateProvinsiHandler,
     UpdateKabupatenHandler,
+    UpdateKecamatanHandler,
     DeleteRegionHandler,
     DeleteProvinsiHandler,
     DeleteKabupatenHandler,
+    DeleteKecamatanHandler,
 
     //Query Handler
     GetRegionHandler,
@@ -58,4 +62,4 @@ import { CreateKecamatanHandler } from './commands/handlers/create-kecamatan.han
   ],
   imports: [PrismaModule, CqrsModule],
 })
-export class RegionModule {}
+export class RegionModule { }
